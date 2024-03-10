@@ -1,0 +1,23 @@
+{
+  "name": "block-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Akbar Idria",
+  "license": "ISC",
+  "dependencies": {
+    "@covalenthq/client-sdk": "^0.9.4",
+    "bullmq": "^5.4.2",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.11.1",
+    "kysely": "^0.27.2",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.2"
+  }
+}
