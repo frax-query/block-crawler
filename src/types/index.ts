@@ -7,10 +7,11 @@ import {
 } from "kysely";
 
 export interface Database {
-    raws: raws;
+    log_events: log_events;
+    transactions: transactions;
 }
 
-export interface raws {
+export interface log_events {
     tx_hash: string;
     block_number: number;
     timestamp: number;
@@ -19,8 +20,32 @@ export interface raws {
     data: string;
     topics: readonly string[];
     transaction_index: number;
+    index: number;
 }
 
-export type Raws = Selectable<raws>;
-export type NewRaws = Insertable<raws>;
-export type UpdateRaws = Updateable<raws>;
+export type LogEvents = Selectable<log_events>;
+export type NewLogEvents = Insertable<log_events>;
+export type UpdateLogEvents = Updateable<log_events>;
+
+export interface transactions {
+    tx_hash: string;
+    block_number: number;
+    timestamp: number;
+    block_hash: string;
+    index: number;
+    type: number;
+    from: string;
+    to: string;
+    nonce: number;
+    gas_limit: number;
+    gas_price: number;
+    max_priority_fee_per_gas: number;
+    max_fee_per_gas: number;
+    max_fee_per_blob_gas: number;
+    data: string;
+    value: number
+}
+
+export type Transactions = Selectable<transactions>;
+export type NewTransactions = Insertable<transactions>;
+export type UpdateTransactions = Updateable<transactions>;

@@ -1,25 +1,28 @@
+import 'dotenv/config'
+
 export default {
     databaseConfig: {
-        database: "mode_mainnet",
-        host: "localhost",
-        user: "postgres",
-        password: "akbaridria",
-        port: 5433,
+        database: process.env.DATABASE_NAME,
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USER,
+        password: process.env.DATABASE_PASSWORD,
+        port: Number(process.env.DATABASE_PORT),
     },
     redisConnection: {
-        host: "localhost",
-        port: 6379,
+        host: process.env.REDIS_HOST as string,
+        port: Number(process.env.REDIS_PORT),
     },
     queueConfig: {
         attemps: Number.MAX_SAFE_INTEGER,
-        repeat: { every: 10000 },
+        repeat: { every: 2000 },
         removeOnFail: false,
         removeOnComplete: true,
     },
     workerConfig: {
         concurrency: 1,
     },
-    rpcUrl: "https://mantle-rpc.publicnode.com",
-    alternativeRpcUrl: "https://rpc.mantle.xyz",
-    blockRange: 300
-}
+    rpcUrl: process.env.RPC_URL,
+    alternativeRpcUrl: process.env.RPC_URL_ALTERNATIVE,
+    blockRange: 20,
+    queueName: "viction_mainnet",
+};

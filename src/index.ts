@@ -4,7 +4,7 @@ import config from "./config";
 
 async function main() {
     const queue = new Queue(queueName, { connection : config.redisConnection });
-    await queue.add("crawling-data", { blockRange: config.blockRange },  { repeat: { every: config.queueConfig.repeat.every }, removeOnComplete: config.queueConfig.removeOnComplete, removeOnFail: config.queueConfig.removeOnFail} );
+    await queue.add("viction_mainnet", { blockRange: config.blockRange },  { attempts: 3, repeat: { every: config.queueConfig.repeat.every }, removeOnComplete: config.queueConfig.removeOnComplete, removeOnFail: config.queueConfig.removeOnFail} );
 }
 
 main()

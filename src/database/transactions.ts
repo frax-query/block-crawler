@@ -1,13 +1,13 @@
 import { db } from "./instance";
-import { NewLogEvents } from "../types";
+import { NewTransactions } from "../types";
 
-export async function insertRaws(params: NewLogEvents[]) {
+export async function insertTransactions(params: NewTransactions[]) {
     return await db.transaction().execute(async (trx) => {
         let batch = [];
         for (const item of params) {
             batch.push(item);
             if (batch.length === 100) {
-                trx.insertInto("log_events")
+                trx.insertInto("transactions")
                     .values(batch)
                     .onConflict((e) => e.doNothing())
                     .executeTakeFirstOrThrow();
@@ -15,17 +15,10 @@ export async function insertRaws(params: NewLogEvents[]) {
             }
         }
         if (batch.length) {
-            trx.insertInto("log_events")
+            trx.insertInto("transactions")
                 .values(batch)
                 .onConflict((e) => e.doNothing())
                 .executeTakeFirstOrThrow();
         }
     });
-}
-
-export async function findLatestBlock() {
-    return await db
-        .selectFrom("transactions")
-        .select(({ fn }) => [fn.max("block_number").as("block_number")])
-        .execute();
 }
