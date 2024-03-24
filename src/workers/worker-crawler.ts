@@ -5,6 +5,7 @@ import { LogEvents, queueName, transactions } from "../types";
 import { findLatestBlock, insertRaws } from "../database/raws";
 import { batchRequest, batchRequestTransaction, wait } from "../utils";
 import { insertTransactions } from "../database/transactions";
+import { insertTokenTrackers } from "../database/token_tracker";
 
 const worker = new Worker(
     queueName,
@@ -87,7 +88,16 @@ const worker = new Worker(
                 };
             });
 
+            const tempParamTokens: string[] = [];
+
             const params: LogEvents[] = raws.map((item) => {
+                if (
+                    item.topics[0] ===
+                        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef" &&
+                    !tempParamTokens.includes(item.address.toLowerCase())
+                ) {
+                    tempParamTokens.push(item.address.toLowerCase());
+                }
                 return {
                     address: item.address.toLowerCase(),
                     block_hash: item.blockHash.toLowerCase(),
@@ -103,6 +113,16 @@ const worker = new Worker(
                 };
             });
 
+            await insertTokenTrackers(
+                tempParamTokens.map((item) => {
+                    return {
+                        token_address: item,
+                        is_tracked: false,
+                    };
+                })
+            ).catch((err) => {
+                throw new Error(err);
+            });
             await insertRaws(params).catch((err) => {
                 throw new Error(err);
             });

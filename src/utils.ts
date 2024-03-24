@@ -1,4 +1,16 @@
 import { ethers } from "ethers";
+import { Queue } from "bullmq";
+import { queueName } from "./types";
+import config from "./config";
+
+
+export const queue = new Queue(queueName, {
+    connection: config.redisConnection,
+});
+
+export const queueErc20 = new Queue(config.queueNameErc20, {
+    connection: config.redisConnection
+})
 
 export const batchRequest = async (
     from: number,

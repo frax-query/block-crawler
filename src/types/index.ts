@@ -9,6 +9,8 @@ import {
 export interface Database {
     log_events: log_events;
     transactions: transactions;
+    token_tracker: token_tracker;
+    erc20: erc20;
 }
 
 export interface log_events {
@@ -49,3 +51,23 @@ export interface transactions {
 export type Transactions = Selectable<transactions>;
 export type NewTransactions = Insertable<transactions>;
 export type UpdateTransactions = Updateable<transactions>;
+
+export interface token_tracker {
+    token_address: string;
+    is_tracked: boolean;
+}
+
+export type TokenTracker = Selectable<token_tracker>;
+export type NewTokenTracker = Insertable<token_tracker>;
+export type UpdateTokenTracker = Updateable<token_tracker>;
+
+export interface erc20 {
+    token_address: string;
+    decimals: number;
+    name: string;
+    symbol: string;
+}
+
+export type Erc20 = Selectable<erc20>;
+export type NewErc20 = Insertable<erc20>;
+export type UpdateErc20 = Updateable<erc20>;
