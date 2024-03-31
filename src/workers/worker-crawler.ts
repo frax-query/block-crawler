@@ -65,7 +65,7 @@ const worker = new Worker(
                 }),
             ])) as ethers.TransactionResponse[];
 
-            const paramsTx: transactions[] = listTransactions.map((item) => {
+            const paramsTx: transactions[] = listTransactions.filter((x) => x.blockNumber <= endBlock).map((item) => {
                 return {
                     block_hash: item.blockHash.toLowerCase(),
                     block_number: item.blockNumber,
