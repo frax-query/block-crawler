@@ -6,6 +6,9 @@ import { findLatestBlock, insertRaws } from "../database/raws";
 import { batchRequest, batchRequestTransaction, wait } from "../utils";
 import { insertTransactions } from "../database/transactions";
 import { insertTokenTrackers } from "../database/token_tracker";
+import { findMaxBlock, insertTx } from "../clickhouse/transactions";
+import { insertTokenTracker } from "../clickhouse/token_tracker";
+import { insertLog } from "../clickhouse/logEvents";
 
 const worker = new Worker(
     queueName,
@@ -18,11 +21,10 @@ const worker = new Worker(
                 config.rpcUrl
             );
 
+            const lastBlockTx = await findMaxBlock();
             // get latest block check
             const lastCheckBlock =
-                Number((await findLatestBlock())?.[0]?.block_number) === 0
-                    ? 67896045
-                    : Number((await findLatestBlock())?.[0]?.block_number) + 1;
+                lastBlockTx === 0 ? 67896045 : lastBlockTx + 1;
             const latestBlock = (await Promise.race([
                 wait(5000),
                 alternativeProvider.getBlockNumber(),
@@ -31,6 +33,7 @@ const worker = new Worker(
                 lastCheckBlock + job.data.blockRange,
                 latestBlock
             );
+            
             if (lastCheckBlock > endBlock) return;
 
             // query data
@@ -65,28 +68,32 @@ const worker = new Worker(
                 }),
             ])) as ethers.TransactionResponse[];
 
-            const paramsTx: transactions[] = listTransactions.filter((x) => x.blockNumber <= endBlock).map((item) => {
-                return {
-                    block_hash: item.blockHash.toLowerCase(),
-                    block_number: item.blockNumber,
-                    data: item.data.toLowerCase(),
-                    from: item.from.toLowerCase(),
-                    gas_limit: Number(item.gasLimit),
-                    gas_price: Number(item.gasPrice),
-                    index: item.index,
-                    max_fee_per_blob_gas: Number(item.maxFeePerBlobGas),
-                    max_fee_per_gas: Number(item.maxFeePerGas),
-                    max_priority_fee_per_gas: Number(item.maxPriorityFeePerGas),
-                    nonce: item.nonce,
-                    timestamp: blockDetails.filter(
-                        (x) => x.number === item.blockNumber
-                    )[0].timestamp,
-                    to: item?.to?.toLowerCase() ?? null,
-                    tx_hash: item.hash.toLowerCase(),
-                    type: item.type,
-                    value: Number(item.value),
-                };
-            });
+            const paramsTx: transactions[] = listTransactions
+                .filter((x) => x.blockNumber <= endBlock)
+                .map((item) => {
+                    return {
+                        block_hash: item.blockHash.toLowerCase(),
+                        block_number: item.blockNumber,
+                        data: item.data.toLowerCase(),
+                        from: item.from.toLowerCase(),
+                        gas_limit: Number(item.gasLimit),
+                        gas_price: Number(item.gasPrice),
+                        index: item.index,
+                        max_fee_per_blob_gas: Number(item.maxFeePerBlobGas),
+                        max_fee_per_gas: Number(item.maxFeePerGas),
+                        max_priority_fee_per_gas: Number(
+                            item.maxPriorityFeePerGas
+                        ),
+                        nonce: item.nonce,
+                        timestamp: blockDetails.filter(
+                            (x) => x.number === item.blockNumber
+                        )[0].timestamp,
+                        to: item?.to?.toLowerCase() ?? null,
+                        tx_hash: item.hash.toLowerCase(),
+                        type: item.type,
+                        value: Number(item.value),
+                    };
+                });
 
             const tempParamTokens: string[] = [];
 
@@ -113,7 +120,7 @@ const worker = new Worker(
                 };
             });
 
-            await insertTokenTrackers(
+            await insertTokenTracker(
                 tempParamTokens.map((item) => {
                     return {
                         token_address: item,
@@ -123,12 +130,29 @@ const worker = new Worker(
             ).catch((err) => {
                 throw new Error(err);
             });
-            await insertRaws(params).catch((err) => {
+
+            // await insertTokenTrackers(
+            //     tempParamTokens.map((item) => {
+            //         return {
+            //             token_address: item,
+            //             is_tracked: false,
+            //         };
+            //     })
+            // ).catch((err) => {
+            //     throw new Error(err);
+            // });
+            await insertLog(params).catch((err) => {
                 throw new Error(err);
             });
-            await insertTransactions(paramsTx).catch((err) => {
+            // await insertRaws(params).catch((err) => {
+            //     throw new Error(err);
+            // });
+            await insertTx(paramsTx).catch((err) => {
                 throw new Error(err);
             });
+            // await insertTransactions(paramsTx).catch((err) => {
+            //     throw new Error(err);
+            // });
             console.log(
                 "Sync status for viction mainnet",
                 ((endBlock / latestBlock) * 100).toFixed(4) + "%"

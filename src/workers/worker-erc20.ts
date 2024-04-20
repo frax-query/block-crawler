@@ -1,10 +1,13 @@
 import { Job, Worker } from "bullmq";
 import config from "../config";
 import { ethers } from "ethers";
-import { getTokens, updateToken } from "../database/token_tracker";
+import { insertErc20 } from "../clickhouse/erc20";
 import erc20_abi from "../abis/erc20.json";
-import { insertErc20 } from "../database/erc20";
-import { NewErc20 } from "index";
+import { Erc20 } from "index";
+import {
+    getTokenByIsTrackedFalseLimit1,
+    updateByToken,
+} from "../clickhouse/token_tracker";
 
 const worker = new Worker(
     config.queueNameErc20,
@@ -14,18 +17,20 @@ const worker = new Worker(
                 config.alternativeRpcUrl2
             );
 
-            const token = await getTokens();
-
-            if (!!!token?.token_address) {
+            const tokenRaw = await getTokenByIsTrackedFalseLimit1();
+            
+            if (tokenRaw.length === 0) {
                 return;
             }
+
+            const token = tokenRaw[0];
 
             const contract = new ethers.Contract(
                 token?.token_address,
                 erc20_abi,
                 provider
             );
-            const paramErc20: NewErc20[] = [];
+            const paramErc20: Erc20[] = [];
 
             await Promise.allSettled([
                 contract.name(),
@@ -35,7 +40,7 @@ const worker = new Worker(
                 if (!data.some((item) => item.status === "rejected")) {
                     paramErc20.push({
                         // @ts-ignore
-                        decimals: data[2].value,
+                        decimals: Number(data[2].value),
                         // @ts-ignore
                         name: data[0].value,
                         // @ts-ignore
@@ -44,9 +49,8 @@ const worker = new Worker(
                     });
                 }
             });
-
             await insertErc20(paramErc20);
-            await updateToken(token?.token_address);
+            await updateByToken(token?.token_address);
             console.log(
                 "success add erc20 token ",
                 token?.token_address,

@@ -24,7 +24,7 @@ export default {
     rpcUrl: process.env.RPC_URL,
     alternativeRpcUrl: process.env.RPC_URL_ALTERNATIVE,
     alternativeRpcUrl2: process.env.RPC_URL_ALTERNATIVE2,
-    blockRange: 100,
+    blockRange: 50,
     queueName: "viction_mainnet",
     queueNameErc20: "viction_mainnet_erc20"
 };
