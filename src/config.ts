@@ -15,7 +15,7 @@ export default {
     queueConfig: {
         attemps: Number.MAX_SAFE_INTEGER,
         repeat: { every: 7000 },
-        removeOnFail: false,
+        removeOnFail: true,
         removeOnComplete: true,
     },
     workerConfig: {
