@@ -1,36 +1,22 @@
 import { Job, Worker } from "bullmq";
 import config from "../config";
 import { ethers } from "ethers";
-import { insertErc20 } from "../clickhouse/erc20";
+import { nameOfqueueErc20 } from "../utils";
+import { IERC20 } from "index";
 import erc20_abi from "../abis/erc20.json";
-import { Erc20 } from "index";
-import {
-    getTokenByIsTrackedFalseLimit1,
-    updateByToken,
-} from "../clickhouse/token_tracker";
+import { insertErc20 } from "../clickhouse/erc20";
 
 const worker = new Worker(
-    config.queueNameErc20,
-    async (job: Job<{ blockRange: number }>) => {
+    nameOfqueueErc20,
+    async (job: Job<{ contract_address: string }>) => {
         try {
-            const provider = new ethers.JsonRpcProvider(
-                config.alternativeRpcUrl2
-            );
-
-            const tokenRaw = await getTokenByIsTrackedFalseLimit1();
-            
-            if (tokenRaw.length === 0) {
-                return;
-            }
-
-            const token = tokenRaw[0];
-
+            const provider = new ethers.JsonRpcProvider(config.rpcUrl);
             const contract = new ethers.Contract(
-                token?.token_address,
+                job.data.contract_address,
                 erc20_abi,
                 provider
             );
-            const paramErc20: Erc20[] = [];
+            const paramErc20: IERC20[] = [];
 
             await Promise.allSettled([
                 contract.name(),
@@ -45,22 +31,13 @@ const worker = new Worker(
                         name: data[0].value,
                         // @ts-ignore
                         symbol: data[1].value,
-                        token_address: token?.token_address.toLowerCase(),
+                        token_address: job.data.contract_address.toLowerCase(),
                     });
+                    insertErc20(paramErc20);
+                    console.log("done added erc20 at ", new Date());
                 }
             });
-            await insertErc20(paramErc20);
-            await updateByToken(token?.token_address);
-            console.log(
-                "success add erc20 token ",
-                token?.token_address,
-                " ",
-                paramErc20[0].name,
-                " ",
-                paramErc20[0].symbol,
-                " ",
-                paramErc20[0].decimals
-            );
+            console.log("contract address is not an erc20 at ", new Date());
         } catch (error) {
             console.log(error);
             throw error;
@@ -69,11 +46,6 @@ const worker = new Worker(
     {
         connection: config.redisConnection,
         autorun: false,
-        concurrency: config.workerConfig.concurrency,
-        limiter: {
-            max: 1,
-            duration: 1000,
-        },
     }
 );
 

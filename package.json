@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-queue": "ts-node src/index.ts",
-    "start-worker": "ts-node src/workers/worker-crawler.ts",
+    "start-worker-block": "ts-node src/workers/worker-block.ts",
+    "start-worker-tx": "ts-node src/workers/worker-tx.ts",
     "start-worker-erc20": "ts-node src/workers/worker-erc20.ts"
   },
   "keywords": [],

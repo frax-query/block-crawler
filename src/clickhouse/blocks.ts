@@ -1,9 +1,9 @@
 import { client } from "./instasnce";
-import { ILogs } from "../types";
+import { IBlock } from "../types";
 
-const table_name = "fraxtal_mainnet.log_events";
+const table_name = "fraxtal_mainnet.blocks";
 
-export const insertLog = async (values: ILogs[]) => {
+export const insertBlock = async (values: IBlock[]) => {
     await client
         .insert({
             table: table_name,

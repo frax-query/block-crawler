@@ -1,24 +1,16 @@
-import { erc20 } from "../types";
 import { client } from "./instasnce";
-import { ClickHouseError } from "@clickhouse/client";
+import { IERC20 } from "../types";
 
-const table_name = 'viction_mainnet.erc20';
+const table_name = "fraxtal_mainnet.erc20";
 
-export const insertErc20 = async (values: erc20[]) => {
-    const promises = [...new Array(10)].map(async () => {
-        await client
-          .insert({
+export const insertErc20 = async (values: IERC20[]) => {
+    await client
+        .insert({
             table: table_name,
             values,
-            format: "JSONEachRow"
-          })
-          .catch((err) => {
-            if (err instanceof ClickHouseError) {
-              console.error(`ClickHouse error: ${err.code}. Insert failed:`, err)
-              return
-            }
-            console.error('Insert failed:', err)
-          })
-      })
-      await Promise.all(promises)
-}
+            format: "JSONEachRow",
+        })
+        .catch((err) => {
+            throw err;
+        });
+};
