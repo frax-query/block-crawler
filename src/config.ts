@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import "dotenv/config";
 
 export default {
     databaseConfig: {
@@ -13,18 +13,18 @@ export default {
         port: Number(process.env.REDIS_PORT),
     },
     queueConfig: {
-        attemps: Number.MAX_SAFE_INTEGER,
-        repeat: { every: 7000 },
+        attemps: 1,
+        repeat: { every: 10000 },
         removeOnFail: true,
         removeOnComplete: true,
+        backoff: {
+            type: "exponential",
+            delay: 1000,
+        },
     },
     workerConfig: {
         concurrency: 1,
     },
     rpcUrl: process.env.RPC_URL,
-    alternativeRpcUrl: process.env.RPC_URL_ALTERNATIVE,
-    alternativeRpcUrl2: process.env.RPC_URL_ALTERNATIVE2,
     blockRange: 50,
-    queueName: "viction_mainnet",
-    queueNameErc20: "viction_mainnet_erc20"
 };

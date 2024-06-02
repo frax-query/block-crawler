@@ -1,30 +1,20 @@
-import { queue, queueErc20 } from "./utils"
+import { queueBlock } from "./utils";
 import config from "./config";
 
 async function main() {
-    await queue.add(
-        "viction_mainnet",
-        { blockRange: config.blockRange },
+    await queueBlock.add(
+        `block-1-${config.blockRange}`,
+        { from: 4819510 , to: config.blockRange + 4819510  },
         {
-            attempts: 3,
-            repeat: { every: config.queueConfig.repeat.every },
-            removeOnComplete: config.queueConfig.removeOnComplete,
-            removeOnFail: config.queueConfig.removeOnFail,
+            attempts: Number.MAX_SAFE_INTEGER,
+            backoff: {
+                type: "exponential",
+                delay: 1000,
+            },
+            removeOnFail: false,
+            removeOnComplete: true,
         }
     );
-
-    await queueErc20.add(
-        "viction_mainet_erc20",
-        {},
-        {
-            attempts: 1,
-            repeat: {
-                every: 60000
-            },
-            removeOnComplete: true,
-            removeOnFail: true
-        }
-    )
 }
 
 main();

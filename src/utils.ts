@@ -1,16 +1,28 @@
 import { ethers } from "ethers";
 import { Queue } from "bullmq";
-import { queueName } from "./types";
 import config from "./config";
 
+export const nameOfqueueBlock = "queue-blocks";
+export const nameOfqueueTx = "queue-tx";
+export const nameOfqueueLogs = "queue-logs";
+export const nameOfqueueErc20 = "queue-erc20";
 
-export const queue = new Queue(queueName, {
+export const queueBlock = new Queue(nameOfqueueBlock, {
     connection: config.redisConnection,
 });
 
-export const queueErc20 = new Queue(config.queueNameErc20, {
+export const queueTx = new Queue(nameOfqueueTx, {
     connection: config.redisConnection
 })
+
+export const queueLogs = new Queue(nameOfqueueLogs, {
+    connection: config.redisConnection
+})
+
+export const queueErc20 = new Queue(nameOfqueueErc20, {
+    connection: config.redisConnection
+})
+
 
 export const batchRequest = async (
     from: number,
@@ -20,6 +32,17 @@ export const batchRequest = async (
     const requests = [];
     for (let i = from; i <= to; i++) {
         requests.push(provider.getBlock(i));
+    }
+    return await Promise.all(requests);
+};
+
+export const batchRequestTransactionReceipt = async (
+    listHash: string[],
+    provider: ethers.JsonRpcProvider
+) => {
+    const requests = [];
+    for (let i = 0; i < listHash.length; i++) {
+        requests.push(provider.getTransactionReceipt(listHash[i]));
     }
     return await Promise.all(requests);
 };
