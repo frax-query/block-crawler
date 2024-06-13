@@ -71,8 +71,8 @@ const worker = new Worker(
 
             // insert block
             queueBlock.add(
-                `block-${endBlock + 1}-${endBlock + config.blockRange}`,
-                { from: endBlock + 1, to: endBlock + config.blockRange },
+                `block-${endBlock + 1}-${endBlock + 2}`,
+                { from: endBlock + 1, to: endBlock + 2 },
                 {
                     attempts: Number.MAX_SAFE_INTEGER,
                     backoff: {

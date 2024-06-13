@@ -19,7 +19,7 @@ const worker = new Worker(
             const provider = new ethers.JsonRpcProvider(config.rpcUrl);
 
             const listTransactionsReceipts = (await Promise.race([
-                wait(5000),
+                wait(100000),
                 batchRequestTransactionReceipt(
                     job.data.transactions,
                     provider
