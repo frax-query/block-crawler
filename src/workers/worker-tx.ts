@@ -15,6 +15,7 @@ import { insertLog } from "../clickhouse/logEvents";
 const worker = new Worker(
     nameOfqueueTx,
     async (job: Job<{ transactions: string[]; dataBlocks: IBlock[] }>) => {
+        if (!job.data) return;
         try {
             const provider = new ethers.JsonRpcProvider(config.rpcUrl);
 
