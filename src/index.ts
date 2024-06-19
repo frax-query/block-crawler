@@ -4,7 +4,7 @@ import config from "./config";
 async function main() {
     await queueBlock.add(
         `block-1-${config.blockRange}`,
-        { from: 1 , to: config.blockRange },
+        { from: 4175093 , to: config.blockRange },
         {
             attempts: Number.MAX_SAFE_INTEGER,
             backoff: {

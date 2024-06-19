@@ -26,5 +26,5 @@ export default {
         concurrency: 1,
     },
     rpcUrl: process.env.RPC_URL,
-    blockRange: 50,
+    blockRange: 2,
 };
