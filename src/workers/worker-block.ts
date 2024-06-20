@@ -81,7 +81,7 @@ const worker = new Worker(
                     },
                     removeOnFail: false,
                     removeOnComplete: true,
-                    delay: 10000,
+                    // delay: 10000,
                 }
             );
 
@@ -102,7 +102,7 @@ const worker = new Worker(
                     },
                     removeOnFail: false,
                     removeOnComplete: true,
-                    delay: 10000,
+                    // delay: 10000,
                 }
             );
 

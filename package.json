@@ -9,7 +9,9 @@
     "start-worker-block": "ts-node src/workers/worker-block.ts",
     "start-worker-tx": "ts-node src/workers/worker-tx.ts",
     "start-worker-erc20": "ts-node src/workers/worker-erc20.ts",
-    "start-queue-helper": "ts-node src/helper.ts"
+    "start-queue-helper": "ts-node src/helper.ts",
+    "start-queue-price": "ts-node src/queue/queue-price.ts",
+    "start-worker-price": "ts-node src/workers/worker-price.ts"
   },
   "keywords": [],
   "author": "Akbar Idria",

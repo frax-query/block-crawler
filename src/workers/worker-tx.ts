@@ -117,7 +117,7 @@ const worker = new Worker(
                             },
                             removeOnComplete: true,
                             removeOnFail: false,
-                            delay: 5000 * (index + 1),
+                            // delay: 5000 * (index + 1),
                         },
                     };
                 });

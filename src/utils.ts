@@ -6,6 +6,7 @@ export const nameOfqueueBlock = "queue-blocks";
 export const nameOfqueueTx = "queue-tx";
 export const nameOfqueueLogs = "queue-logs";
 export const nameOfqueueErc20 = "queue-erc20";
+export const nameOfQueuePrice = "queue-price";
 
 export const queueBlock = new Queue(nameOfqueueBlock, {
     connection: config.redisConnection,
@@ -23,6 +24,9 @@ export const queueErc20 = new Queue(nameOfqueueErc20, {
     connection: config.redisConnection
 })
 
+export const queuePrice = new Queue(nameOfQueuePrice, {
+    connection: config.redisConnection
+})
 
 export const batchRequest = async (
     from: number,

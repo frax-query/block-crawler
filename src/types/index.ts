@@ -57,3 +57,11 @@ export interface IERC20 {
     symbol: string;
     decimals: number;
 }
+
+export interface IPrice {
+    timestamp: number;
+    name: string;
+    symbol: string;
+    price: number;
+    source: string;
+}
