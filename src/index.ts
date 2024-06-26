@@ -2,9 +2,10 @@ import { queueBlock } from "./utils";
 import config from "./config";
 
 async function main() {
+    const startBlock = 5331699
     await queueBlock.add(
         `block-1-${config.blockRange}`,
-        { from: 5185471 , to: 5185471 + config.blockRange },
+        { from: startBlock , to: startBlock + config.blockRange },
         {
             attempts: Number.MAX_SAFE_INTEGER,
             backoff: {

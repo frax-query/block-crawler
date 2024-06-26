@@ -25,8 +25,24 @@ const worker = new Worker(
 
             const endBlock = Math.min(job.data.to, latestBlock);
             const lastCheckBlock = job.data.from;
-
-            if (lastCheckBlock > endBlock) return;
+            // FIXME should be add another queue start from latest block
+            if (lastCheckBlock > endBlock) {
+                queueBlock.add(
+                    `block-${endBlock}-${endBlock + config.blockRange}`,
+                    { from: endBlock, to: endBlock + config.blockRange },
+                    {
+                        attempts: Number.MAX_SAFE_INTEGER,
+                        backoff: {
+                            type: "exponential",
+                            delay: 1000,
+                        },
+                        removeOnFail: false,
+                        removeOnComplete: true,
+                        delay: 500,
+                    }
+                );
+                return;
+            };
 
             const blockDetails = (await Promise.race([
                 wait(5000),
@@ -71,8 +87,8 @@ const worker = new Worker(
 
             // insert block
             queueBlock.add(
-                `block-${endBlock + 1}-${endBlock + 2}`,
-                { from: endBlock + 1, to: endBlock + 2 },
+                `block-${endBlock + 1}-${endBlock + config.blockRange}`,
+                { from: endBlock + 1, to: endBlock + config.blockRange },
                 {
                     attempts: Number.MAX_SAFE_INTEGER,
                     backoff: {
