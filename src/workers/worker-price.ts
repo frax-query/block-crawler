@@ -48,7 +48,7 @@ const worker = new Worker(
                 );
                 return;
             }
-            console.log("done ", job.data.address)
+
             const res = await provider.getLogs({
                 address: job.data.address,
                 fromBlock: job.data.fromBlock,
@@ -56,15 +56,15 @@ const worker = new Worker(
                 topics: [job.data.topics, null, null],
             });
 
-            // await insertPrice(res.map((item) => {
-            //     return {
-            //         name: job.data.name,
-            //         price: Number(item.topics[1]) / Math.pow(10, job.data.decimals),
-            //         source: "chainlink",
-            //         symbol: job.data.symbol,
-            //         timestamp: Number(item.data)
-            //     }
-            // }))
+            await insertPrice(res.map((item) => {
+                return {
+                    name: job.data.name,
+                    price: Number(item.topics[1]) / Math.pow(10, job.data.decimals),
+                    source: "chainlink",
+                    symbol: job.data.symbol,
+                    timestamp: Number(item.data)
+                }
+            }))
             
 
             queuePrice.add(
