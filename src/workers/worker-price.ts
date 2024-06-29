@@ -18,9 +18,9 @@ const worker = new Worker(
         }>
     ) => {
         try {
-            const rpc = "https://ethereum-rpc.publicnode.com";
+            const rpc = "https://eth.llamarpc.com";
             const provider = new ethers.JsonRpcProvider(rpc);
-            const range = 50000;
+            const range = 9000;
             const latestBlock = Number(await provider.getBlockNumber());
             if (job.data.fromBlock > latestBlock) {
                 queuePrice.add(
@@ -48,6 +48,7 @@ const worker = new Worker(
                 );
                 return;
             }
+            console.log("done ", job.data.address)
             const res = await provider.getLogs({
                 address: job.data.address,
                 fromBlock: job.data.fromBlock,
@@ -55,15 +56,16 @@ const worker = new Worker(
                 topics: [job.data.topics, null, null],
             });
 
-            await insertPrice(res.map((item) => {
-                return {
-                    name: job.data.name,
-                    price: Number(item.topics[1]) / Math.pow(10, job.data.decimals),
-                    source: "chainlink",
-                    symbol: job.data.symbol,
-                    timestamp: Number(item.data)
-                }
-            }))
+            // await insertPrice(res.map((item) => {
+            //     return {
+            //         name: job.data.name,
+            //         price: Number(item.topics[1]) / Math.pow(10, job.data.decimals),
+            //         source: "chainlink",
+            //         symbol: job.data.symbol,
+            //         timestamp: Number(item.data)
+            //     }
+            // }))
+            
 
             queuePrice.add(
                 `queue-price-${job.data.toBlock + 1}-${

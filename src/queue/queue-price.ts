@@ -39,11 +39,11 @@ async function main() {
         data.map((item) => {
             return {
                 name: `queue-price-${item.startBlock}-${
-                    item.startBlock + 50000
+                    item.startBlock + 9000
                 }-${item.address}`,
                 data: {
                     fromBlock: item.startBlock,
-                    toBlock: item.startBlock + 50000,
+                    toBlock: item.startBlock + 9000,
                     address: item.address,
                     topics: item.topics,
                     name: item.name,
