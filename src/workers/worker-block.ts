@@ -97,7 +97,7 @@ const worker = new Worker(
                     },
                     removeOnFail: false,
                     removeOnComplete: true,
-                    delay: 500,
+                    delay: 200,
                 }
             );
 
