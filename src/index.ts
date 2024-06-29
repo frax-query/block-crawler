@@ -2,7 +2,7 @@ import { queueBlock } from "./utils";
 import config from "./config";
 
 async function main() {
-    const startBlock = 5774311
+    const startBlock = 5845705
     await queueBlock.add(
         `block-1-${config.blockRange}`,
         { from: startBlock , to: startBlock + config.blockRange },
