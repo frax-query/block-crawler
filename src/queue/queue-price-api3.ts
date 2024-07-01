@@ -1,5 +1,5 @@
 import { IJobPriceAPI3 } from "../types";
-import { queuePrice } from "../utils";
+import { queuePriceApi3 } from "../utils";
 
 async function main() {
     const dataPrices: IJobPriceAPI3[] = [
@@ -46,7 +46,7 @@ async function main() {
             blockRange: 9000,
         },
     ];
-    queuePrice.addBulk(
+    queuePriceApi3.addBulk(
         dataPrices.map((item) => {
             return {
                 data: item,

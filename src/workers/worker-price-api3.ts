@@ -1,7 +1,7 @@
 import { Job, Worker } from "bullmq";
 import config from "../config";
 import { ethers } from "ethers";
-import { nameOfQueuePrice, queuePrice, splitData } from "../utils";
+import { nameOfQueuePrice, queuePriceApi3, splitData } from "../utils";
 import { insertPrice } from "../clickhouse/price";
 import { IJobPriceAPI3 } from "../types";
 
@@ -15,7 +15,7 @@ const worker = new Worker(
             const endBlock = job.data.startBlock + job.data.blockRange;
 
             if (job.data.startBlock > latestBlock) {
-                queuePrice.add(
+                queuePriceApi3.add(
                     "queue-price-api3-" +
                         latestBlock +
                         "-" +
@@ -60,7 +60,7 @@ const worker = new Worker(
                 })
             );
 
-            queuePrice.add(
+            queuePriceApi3.add(
                 `queue-price-api3-` +
                     endBlock +
                     1 +

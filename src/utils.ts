@@ -7,6 +7,7 @@ export const nameOfqueueTx = "queue-tx";
 export const nameOfqueueLogs = "queue-logs";
 export const nameOfqueueErc20 = "queue-erc20";
 export const nameOfQueuePrice = "queue-price";
+export const nameOfQueuePriceAPI3 = "queue-price-api3"
 
 export const queueBlock = new Queue(nameOfqueueBlock, {
     connection: config.redisConnection,
@@ -25,6 +26,10 @@ export const queueErc20 = new Queue(nameOfqueueErc20, {
 });
 
 export const queuePrice = new Queue(nameOfQueuePrice, {
+    connection: config.redisConnection,
+});
+
+export const queuePriceApi3 = new Queue(nameOfQueuePriceAPI3, {
     connection: config.redisConnection,
 });
 
