@@ -1,12 +1,12 @@
 import { Job, Worker } from "bullmq";
 import config from "../config";
 import { ethers } from "ethers";
-import { nameOfQueuePrice, queuePriceApi3, splitData } from "../utils";
+import { nameOfQueuePriceAPI3, queuePriceApi3, splitData } from "../utils";
 import { insertPrice } from "../clickhouse/price";
 import { IJobPriceAPI3 } from "../types";
 
 const worker = new Worker(
-    nameOfQueuePrice,
+    nameOfQueuePriceAPI3,
     async (job: Job<IJobPriceAPI3>) => {
         try {
             const rpc = job.data.rpc ?? config.rpcUrl;
