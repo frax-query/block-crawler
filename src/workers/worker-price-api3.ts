@@ -41,8 +41,6 @@ const worker = new Worker(
                 toBlock: endBlock,
                 topics: [job.data.topics0, job.data.dataFeedId],
             });
-            console.log(endBlock)
-            console.log(res)
 
             await insertPrice(
                 res.map((item) => {

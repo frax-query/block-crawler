@@ -39,9 +39,6 @@ const worker = new Worker(
                 topics: [job.data.topics0],
             });
 
-            console.log(endBlock)
-            console.log(res)
-
             await insertPrice(
                 res.map((item) => {
                     return {
