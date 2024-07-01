@@ -61,7 +61,21 @@ export interface IERC20 {
 export interface IPrice {
     timestamp: number;
     name: string;
+    token_address: string;
     symbol: string;
     price: number;
     source: string;
+}
+
+export interface IJobPriceAPI3 {
+    contractAddress: string;
+    dataFeedId: string;
+    topics0: string;
+    tokenName: string;
+    decimals: number;
+    symbol: string;
+    tokenAddress: string;
+    rpc: string | null;
+    startBlock: number;
+    blockRange: number;
 }

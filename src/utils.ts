@@ -13,20 +13,20 @@ export const queueBlock = new Queue(nameOfqueueBlock, {
 });
 
 export const queueTx = new Queue(nameOfqueueTx, {
-    connection: config.redisConnection
-})
+    connection: config.redisConnection,
+});
 
 export const queueLogs = new Queue(nameOfqueueLogs, {
-    connection: config.redisConnection
-})
+    connection: config.redisConnection,
+});
 
 export const queueErc20 = new Queue(nameOfqueueErc20, {
-    connection: config.redisConnection
-})
+    connection: config.redisConnection,
+});
 
 export const queuePrice = new Queue(nameOfQueuePrice, {
-    connection: config.redisConnection
-})
+    connection: config.redisConnection,
+});
 
 export const batchRequest = async (
     from: number,
@@ -66,4 +66,10 @@ export const wait = (ms: number) => {
     return new Promise((_, reject) => {
         setTimeout(() => reject(new Error("timeout succeeded")), ms);
     });
+};
+
+export const splitData = (value: string) => {
+    const strippedData = value.slice(2);
+    const chunks = strippedData.match(/.{1,64}/g).map((chunk) => "0x" + chunk);
+    return chunks;
 };

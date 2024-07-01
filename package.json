@@ -10,6 +10,8 @@
     "start-worker-tx": "ts-node src/workers/worker-tx.ts",
     "start-worker-erc20": "ts-node src/workers/worker-erc20.ts",
     "start-queue-helper": "ts-node src/helper.ts",
+    "start-queue-price-api3": "ts-node src/queue/queue-price-api3.ts",
+    "start-worker-price-api3": "ts-node src/workers/worker-price-api3.ts",
     "start-queue-price": "ts-node src/queue/queue-price.ts",
     "start-worker-price": "ts-node src/workers/worker-price.ts"
   },
@@ -18,9 +20,6 @@
   "license": "ISC",
   "dependencies": {
     "@clickhouse/client": "^1.0.1",
-    "@covalenthq/client-sdk": "^0.9.4",
-    "@requestnetwork/currency": "^0.15.0",
-    "@requestnetwork/request-client.js": "^0.47.1-next.2043",
     "bullmq": "^5.4.2",
     "dotenv": "^16.4.5",
     "ethers": "^6.11.1",
