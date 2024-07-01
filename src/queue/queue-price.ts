@@ -10,7 +10,7 @@ async function main() {
             symbol: "frxETH",
             tokenName: "frxETH",
             decimals: 8,
-            startBlock: 20124605,
+            startBlock: 16842888,
             tokenAddress: "0xfc00000000000000000000000000000000000006",
             rpc: "https://eth.llamarpc.com",
             blockRange: 9000
@@ -22,7 +22,7 @@ async function main() {
             symbol: "BTC",
             tokenName: "Bitcoin",
             decimals: 8,
-            startBlock: 20124605,
+            startBlock: 16842888,
             blockRange: 9000,
             rpc: "https://eth.llamarpc.com",
             tokenAddress: "0x"
@@ -34,7 +34,7 @@ async function main() {
             tokenName: "FRAX",
             tokenAddress: "0xfc00000000000000000000000000000000000001",
             decimals: 8,
-            startBlock: 20124605,
+            startBlock: 12974028,
             blockRange: 9000,
             dataFeedId: "",
             rpc: "https://eth.llamarpc.com"
@@ -46,7 +46,7 @@ async function main() {
             symbol: "FXS",
             tokenName: "Frax Share",
             decimals: 8,
-            startBlock: 20124605,
+            startBlock: 12096377,
             blockRange: 9000,
             rpc: "https://eth.llamarpc.com",
             tokenAddress: "0xfc00000000000000000000000000000000000002"
