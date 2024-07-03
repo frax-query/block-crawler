@@ -18,14 +18,11 @@ const worker = new Worker(
         try {
             const provider = new ethers.JsonRpcProvider(config.rpcUrl);
 
-            const latestBlock = (await Promise.race([
-                wait(5000),
-                provider.getBlockNumber(),
-            ])) as number;
-
+            const latestBlock = await provider.getBlockNumber();
+            console.log(latestBlock, job.data.from)
             const endBlock = Math.min(job.data.to, latestBlock);
             const lastCheckBlock = job.data.from;
-            // FIXME should be add another queue start from latest block
+
             if (lastCheckBlock > endBlock) {
                 queueBlock.add(
                     `block-${endBlock}-${endBlock + config.blockRange}`,
@@ -83,7 +80,7 @@ const worker = new Worker(
                 };
             });
 
-            await insertBlock(dataBlocks);
+            // await insertBlock(dataBlocks);
 
             // insert block
             queueBlock.add(
