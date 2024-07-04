@@ -10,7 +10,6 @@ import {
 } from "../utils";
 import { IBlock } from "index";
 import { insertBlock } from "../clickhouse/blocks";
-// import { findMaxBlock } from "../clickhouse/logEvents";
 
 const worker = new Worker(
     nameOfqueueBlock,
@@ -80,7 +79,7 @@ const worker = new Worker(
                 };
             });
 
-            // await insertBlock(dataBlocks);
+            await insertBlock(dataBlocks);
 
             // insert block
             queueBlock.add(
